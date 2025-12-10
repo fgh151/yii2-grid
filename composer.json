@@ -1,0 +1,36 @@
+{
+  "name": "fgh151/yii2-grid",
+  "description": "Grid view with switchable columns",
+  "type": "yii2-extension",
+  "keywords": [
+    "yii2",
+    "extension"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Fedor B Gorsky",
+      "email": "fedor@support-pc.org"
+    }
+  ],
+  "require": {
+    "yiisoft/yii2": "^2.0.0",
+    "yiisoft/yii2-bootstrap5": "^2.0.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "fgh151\\yii\\grid\\": ""
+    }
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://asset-packagist.org"
+    }
+  ],
+  "config": {
+    "allow-plugins": {
+      "yiisoft/yii2-composer": true
+    }
+  }
+}
