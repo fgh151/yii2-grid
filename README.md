@@ -28,4 +28,20 @@ Usage
 Once the extension is installed, simply use it in your code by  :
 
 ```php
-<?= \fgh151\yii\grid\AutoloadExample::widget(); ?>```
+use fgh151\yii\grid\GridView;
+
+/**
+ * @var $dataProvider yii\data\ActiveDataProvider
+ * @var $searchModel \yii\db\ActiveRecord
+ */
+
+$availableColumns ['id', 'email', 'firstname', 'lastname'];
+$defaultColumns = ['id', 'email'];
+
+echo GridView::widget([
+        'dataProvider' => $dataProvider, // required
+        'filterModel' => $searchModel, // default is null
+        'defaultColumns' => $defaultColumns, // default is [], if you want to use default columns
+        'availableColumns' => $availableColumns, // default is [], if you want to use default columns
+]);
+```
