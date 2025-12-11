@@ -87,6 +87,8 @@ class SettingsDropdown extends Dropdown
             }
         }
 
+        $lines[] = Html::tag('div', Html::submitButton('Применить', ['class' => 'btn btn-primary']), ['class' => 'dropdown-item']);
+
         $form = Html::tag('form', implode("\n", $lines), ['method' => 'post', 'id' => $this->formId]);
 
         return Html::tag('div', $form, $options);

@@ -156,11 +156,6 @@ CSS
                 'items' => $items,
                 'modelClass' => $this->dataProvider->query->modelClass,
                 'selectedItems' => $this->selectedColumns,
-                'clientEvents' => [
-                    'hidden.bs.dropdown' => new JsExpression('function(event) {
-                    $("#' . $dropdownId . '").submit();
-        }'),
-                ],
             ],
         ]);
     }
