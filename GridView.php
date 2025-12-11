@@ -6,7 +6,8 @@ use Throwable;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\bootstrap5\ButtonDropdown;
-use yii\web\JsExpression;
+use yii\grid\ActionColumn;
+use yii\grid\SerialColumn;
 
 class GridView extends \yii\grid\GridView
 {
@@ -17,9 +18,12 @@ class GridView extends \yii\grid\GridView
 
     /** @var DataColumn[] */
     public array $availableColumns = [];
-    private array $selectedColumns = [];
-
     public array $defaultColumns = [];
+    public array $constColumns = [
+        SerialColumn::class,
+        ActionColumn::class,
+    ];
+    private array $selectedColumns = [];
 
     /**
      * @noinspection PhpMissingReturnTypeInspection
@@ -50,9 +54,14 @@ CSS
         );
         if (empty($this->availableColumns)) {
             $this->availableColumns = $this->columns;
+        } else {
+            $this->initColumnsAttribute('availableColumns');
         }
+
         if (empty($this->defaultColumns)) {
             $this->defaultColumns = $this->columns;
+        } else {
+            $this->initColumnsAttribute('defaultColumns');
         }
 
         $this->selectedColumns = Yii::$app->session->get('selectedColumns', []);
@@ -66,24 +75,20 @@ CSS
         }
 
         $this->columns = [];
-
-        foreach ($this->selectedColumns as $sColumn) {
-
-            foreach ($this->availableColumns as $aColumn) {
-                if (is_string($aColumn) && str_starts_with(str_replace('.', '_', $aColumn), $sColumn)) {
-                    $this->columns[] = $aColumn;
-                } elseif  ($aColumn == $sColumn) {
-                    $this->columns[] = $aColumn;
-                } elseif (is_array($aColumn) && isset($aColumn['attribute']) && $aColumn['attribute'] == $sColumn) {
-                    $this->columns[] = $aColumn;
+        foreach ($this->availableColumns as $aColumn) {
+            $type = get_class($aColumn);
+            if (in_array($type, $this->constColumns)) {
+                $this->columns[] = $aColumn;
+            } else {
+                foreach ($this->selectedColumns as $sColumn) {
+                    if ($aColumn instanceof DataColumn) {
+                        if ($aColumn->attribute == $sColumn) {
+                            $this->columns[] = $aColumn;
+                        }
+                    }
                 }
             }
         }
-
-        $this->initColumns();
-
-        $this->initColumnsAttribute('defaultColumns');
-        $this->initColumnsAttribute('availableColumns');
     }
 
     /**
