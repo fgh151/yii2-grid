@@ -24,6 +24,14 @@ class GridView extends \yii\grid\GridView
         ActionColumn::class,
     ];
     private array $selectedColumns = [];
+    /**
+     * Разделитель между связями. Например: proposal.user.contact.email станет proposal__R__user__R__contact__R__email
+     * Данная трансформация необходима тк php передает в именах POST переменных вместо точек - знак подчеркивания.
+     * В свою очередь знак подчеркивания не может быть использован в чистом виде, поскольку может быть применен в snake_case нотации.
+     * Использование точек возможно с директивной register_globals, которая чаще всего отключена.
+     * @var string
+     */
+    public string $relationDelimiter = '__R__';
 
     /**
      * @noinspection PhpMissingReturnTypeInspection
@@ -39,7 +47,7 @@ class GridView extends \yii\grid\GridView
             unset($post['gridSettings']);
             unset($post[Yii::$app->getRequest()->csrfParam]);
 
-            $columns = array_keys($post);
+            $columns = str_replace($this->relationDelimiter, '.', array_keys($post));
 
             Yii::$app->session->set('selectedColumns', $columns);
         }
@@ -146,7 +154,7 @@ CSS
 
         foreach ($this->availableColumns as $column) {
             if ($column instanceof DataColumn) {
-                $items[] = ['label' => $column->getHeaderLabel(), 'attribute' => $column->attribute];
+                $items[] = ['label' => $column->getHeaderLabel(), 'attribute' => str_replace('.', $this->relationDelimiter, $column->attribute)];
             }
         }
 
@@ -157,6 +165,7 @@ CSS
             'label' => $this->settingsButton,
             'dropdownClass' => SettingsDropdown::class,
             'dropdown' => [
+                'relationDelimiter' => $this->relationDelimiter,
                 'formId' => $dropdownId,
                 'items' => $items,
                 'modelClass' => $this->dataProvider->query->modelClass,

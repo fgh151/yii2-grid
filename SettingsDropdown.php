@@ -14,6 +14,8 @@ class SettingsDropdown extends Dropdown
     public $modelClass;
     public $formId;
 
+    public string $relationDelimiter = '__R__';
+
     protected function renderItems(array $items, array $options = []): string
     {
         $request = Yii::$app->getRequest();
@@ -52,7 +54,7 @@ class SettingsDropdown extends Dropdown
 
             $attribute = array_key_exists('attribute', $item) ? $item['attribute'] : null;
             if ($attribute) {
-                $lines[] = Html::tag('div', Html:: checkbox($attribute, in_array(str_replace('.', '_', $attribute), $this->selectedItems), ['label' => $label]), ['class' => 'dropdown-item']);
+                $lines[] = Html::tag('div', Html:: checkbox($attribute, in_array(str_replace( $this->relationDelimiter, '.', $attribute), $this->selectedItems), ['label' => $label]), ['class' => 'dropdown-item']);
             } else {
                 $url = array_key_exists('url', $item) ? $item['url'] : null;
                 if (empty($item['items'])) {
