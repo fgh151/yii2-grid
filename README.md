@@ -35,7 +35,7 @@ use fgh151\yii\grid\GridView;
  * @var $searchModel \yii\db\ActiveRecord
  */
 
-$availableColumns ['id', 'email', 'firstname', 'lastname'];
+$availableColumns = ['id', 'email', 'firstname', 'lastname'];
 $defaultColumns = ['id', 'email'];
 
 echo GridView::widget([
@@ -44,4 +44,19 @@ echo GridView::widget([
         'defaultColumns' => $defaultColumns, // default is [], if you want to use default columns
         'availableColumns' => $availableColumns, // default is [], if you want to use default columns
 ]);
+```
+
+Trim column header
+------------------
+
+```php
+$availableColumns = [
+    [
+        // Default column header will be 'Column with long attribute label'
+        // Or fetch from $model->getAttributeLabel('attribute')
+        'attribute' => 'column_with_long_attribute_label',
+        // Now it will be 'Column with...'
+        'trim' => 10,
+    ],
+];
 ```
