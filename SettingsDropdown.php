@@ -16,12 +16,34 @@ class SettingsDropdown extends Dropdown
 
     public string $relationDelimiter = '__R__';
 
+    public bool $showAll = false;
+
     protected function renderItems(array $items, array $options = []): string
     {
         $request = Yii::$app->getRequest();
         $lines = [];
         $lines[] = Html::hiddenInput($request->csrfParam, $request->getCsrfToken());
         $lines[] = Html::hiddenInput('gridSettings', $this->modelClass);
+
+
+        if ($this->showAll) {
+
+            $showAllId = $this->formId.'-all';
+            $formId = $this->formId;
+
+            $lines[] = Html::tag('div', Html::checkbox('showAll', false, ['label' => 'Показать все', 'id' => $showAllId]), ['class' => 'dropdown-item']);
+
+            $this->getView()->registerJs(<<<JS
+    $('#$showAllId').on('change', function(){
+        if ($(this).is(':checked')) {
+            $('#$formId input:checkbox').not(this).prop('checked', this.checked);
+        } else {
+            $('#$formId input:checkbox').not(this).prop('checked', false);
+        }
+    });
+JS);
+        }
+
         foreach ($items as $item) {
             if (is_string($item)) {
                 $lines[] = ($item === '-')
@@ -94,8 +116,5 @@ class SettingsDropdown extends Dropdown
         $form = Html::tag('form', implode("\n", $lines), ['method' => 'post', 'id' => $this->formId]);
 
         return Html::tag('div', $form, $options);
-
-
-
     }
 }

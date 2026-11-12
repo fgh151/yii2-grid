@@ -11,6 +11,7 @@ use yii\grid\SerialColumn;
 
 class GridView extends \yii\grid\GridView
 {
+    public bool $showAll = false;
     public $dataColumnClass = DataColumn::class;
     public $layout = "{settings}\n{summary}\n{items}\n{pager}";
 
@@ -170,6 +171,7 @@ CSS
                 'items' => $items,
                 'modelClass' => $this->dataProvider->query->modelClass,
                 'selectedItems' => $this->selectedColumns,
+                'showAll' => $this->showAll,
             ],
         ]);
     }

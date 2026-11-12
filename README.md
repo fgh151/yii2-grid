@@ -43,6 +43,7 @@ echo GridView::widget([
         'filterModel' => $searchModel, // default is null
         'defaultColumns' => $defaultColumns, // default is [], if you want to use default columns
         'availableColumns' => $availableColumns, // default is [], if you want to use default columns
+        'showAll' => true, // default is false, render checkbox with show all func
 ]);
 ```
 
