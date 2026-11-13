@@ -14,9 +14,12 @@ class DataColumn extends \yii\grid\DataColumn
 
     public int $trimLabelLength = 10;
 
-    public function getHeaderLabel(): ?string
+    public function getHeaderLabel($trim = false): ?string
     {
-        return $this->getHeaderCellLabel();
+        if ($trim) {
+            return $this->getHeaderCellLabel();
+        }
+        return parent::getHeaderCellLabel();
     }
 
     protected function getHeaderCellLabel()
